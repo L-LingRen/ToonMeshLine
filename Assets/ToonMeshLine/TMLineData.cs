@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TMLineData", menuName = "ToonMeshLine/TMLineData", order = 0)]
 public class TMLineData : ScriptableObject {
     public List<TMLineDataStruct> Lines = new();
-    
+
+#if UNITY_EDITOR
     public void RefreshTMLineData(Mesh Mesh) {
         if (Mesh == null) {
             Debug.LogError("Mesh is null");
@@ -31,9 +33,12 @@ public class TMLineData : ScriptableObject {
         foreach (var Item in TMDataDic.Values) {
             Lines.Add(Item);
         }
-        
+
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssetIfDirty(this);
         Debug.Log("TMLine Data Refresh Successfully");
     }
+#endif
 
     static string GetLineId(Vector3 Point1, Vector3 Point2) {
         return $"({Point1.x:f4},{Point1.y:f4},{Point1.z:f4})-({Point2.x:f4},{Point2.y:f4},{Point2.z:f4})";
