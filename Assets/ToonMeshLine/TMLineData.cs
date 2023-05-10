@@ -5,7 +5,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "TMLineData", menuName = "ToonMeshLine/TMLineData", order = 0)]
 public class TMLineData : ScriptableObject {
-    public List<TMLineDataStruct> Lines = new();
+    public List<TMLineDataStruct> Lines = new List<TMLineDataStruct>();
 
 #if UNITY_EDITOR
     public void RefreshTMLineData(Mesh Mesh) {
