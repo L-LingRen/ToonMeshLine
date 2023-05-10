@@ -1,31 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(TMLineRenderer))]
 public class TMLineRendererEditor : Editor {
     TMLineRenderer TMLineRenderer;
+    MaterialEditor MaterialEditor;
     
     void OnEnable() {
         TMLineRenderer = (TMLineRenderer) target;
     }
 
     public override void OnInspectorGUI() {
-        if (!TMLineRenderer.IsInit) {
-            if (GUILayout.Button("Init")) {
-                TMLineRenderer.Init();
-            }
-            base.OnInspectorGUI();
+        if (GUILayout.Button("Refresh TMLineData")) {
+            TMLineRenderer.TryLoadTMData();
         }
-        else {
-            if (GUILayout.Button("Refresh TMLineData")) {
-                TMLineRenderer.RefreshTMLineData();
-            }
-            base.OnInspectorGUI();
-            var MatEditor = (MaterialEditor) CreateEditor(TMLineRenderer.Material);
-            MatEditor.PropertiesGUI();
+        base.OnInspectorGUI();
+        if (MaterialEditor == null && TMLineRenderer.Material != null) {
+            MaterialEditor = (MaterialEditor) CreateEditor(TMLineRenderer.Material);
+        }
+
+        if (MaterialEditor != null) {
+            MaterialEditor.PropertiesGUI();
         }
     }
 }
